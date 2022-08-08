@@ -32,7 +32,7 @@ namespace CurrencyExchange.Api
 					if (isMigrationNeeded)
 					{
 						context.Database.Migrate();
-					}
+					}																							   
 				}
 			}
 
