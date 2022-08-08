@@ -29,7 +29,10 @@ namespace CurrencyExchange.Api.Middleware
 			}
 
 			var rateLimitCount = await _activityTransactionProvider.ProcessesRequest(clientId);
-			if (rateLimitCount.Count > 10 && rateLimitCount.Timestamp < DateTime.Now)
+			// check if key expired
+			var isExpired = rateLimitCount.Timestamp + TimeSpan.FromHours(1) < DateTime.UtcNow;
+
+			if (rateLimitCount.Count > 10 && !isExpired)
 			{
 				await TransactionExceededResponse(httpContext,
 					(DateTime.Now - rateLimitCount.Timestamp).Minutes.ToString());
